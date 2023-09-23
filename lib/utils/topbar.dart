@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money_manager/utils/data_provider.dart';
+import 'package:money_manager/utils/database_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqflite.dart';
 
+import '../services/db_service.dart';
 import 'themes.dart';
 
 class TopBar extends StatefulWidget {
@@ -18,11 +21,59 @@ class TopBar extends StatefulWidget {
 }
 
 class _TopBarState extends State<TopBar> {
+  var totalExpense = [];
+  var totalIncome = [];
+  DBHelper _dbHelper = DBHelper();
+
+  // updateExpenseView() {
+  //   final Future<Database> dbFuture = _dbHelper.initDb();
+  //   dbFuture.then((value) {
+  //     Future<List<Map<String, dynamic>>> expense = _dbHelper.totalExpense();
+  //     expense.then((value) {
+  //       setState(() {
+  //         totalExpense = value;
+  //       });
+  //       print(value);
+  //     });
+  //   });
+  // }
+
+  // updateIncomeView() {
+  //   final Future<Database> dbFuture = _dbHelper.initDb();
+  //   dbFuture.then((value) {
+  //     Future<List<Map<String, dynamic>>> expense = _dbHelper.totalIncome();
+  //     expense.then((value) {
+  //       setState(() {
+  //         totalIncome = value;
+  //       });
+  //       print(value);
+  //     });
+  //   });
+  // }
+
+  // updateData() {
+  //   updateIncomeView();
+  //   updateExpenseView();
+  // }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // DatabaseProvider().fetchTopData(context);
+    // updateData();
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Function expFunc = updateExpenseView();
+    // Function incomeFunc = updateIncomeView();
     final dataProvider = Provider.of<DataProvider>(
       context,
     );
+    final databaseProvider = Provider.of<DatabaseProvider>(context);
+    databaseProvider.fetchTopData(context);
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
@@ -219,7 +270,7 @@ class _TopBarState extends State<TopBar> {
                             ),
                   ),
                   Text(
-                    '\$ 400',
+                    '\$${databaseProvider.totalIncome}',
                     style:
                         Theme.of(context).primaryTextTheme.titleLarge!.copyWith(
                               color: Theme.of(context).colorScheme.secondary,
@@ -239,7 +290,7 @@ class _TopBarState extends State<TopBar> {
                             ),
                   ),
                   Text(
-                    '\$ 400',
+                    '\$${databaseProvider.totalExpense}',
                     style:
                         Theme.of(context).primaryTextTheme.titleLarge!.copyWith(
                               color: Colors.red[400],
@@ -259,10 +310,16 @@ class _TopBarState extends State<TopBar> {
                             ),
                   ),
                   Text(
-                    '\$0.00',
+                    '\$ ${databaseProvider.totalIncome - databaseProvider.totalExpense}',
                     style:
                         Theme.of(context).primaryTextTheme.titleLarge!.copyWith(
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: (databaseProvider.loadStatus == true)
+                                  ? Colors.grey
+                                  : databaseProvider.totalIncome -
+                                              databaseProvider.totalExpense >
+                                          0
+                                      ? Theme.of(context).colorScheme.secondary
+                                      : Colors.red[400],
                             ),
                   ),
                 ],

@@ -2,8 +2,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_manager/models/transaction.dart';
+import 'package:money_manager/services/db_service.dart';
 import 'package:money_manager/utils/bnavbar.dart';
 import 'package:provider/provider.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 import '../utils/themes.dart';
 import '../utils/topbar.dart';
@@ -19,15 +22,17 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-PageController controller = PageController();
-
 class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ThemeProvider>(context);
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.of(context).pushNamed('/add-t').then((value) {
+            setState(() {});
+          });
+        },
         child: Icon(Icons.add),
       ),
       appBar: AppBar(
@@ -80,3 +85,5 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+PageController controller = PageController();
