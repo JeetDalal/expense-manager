@@ -122,6 +122,31 @@ class DBHelper {
     return tMapList;
   }
 
+  fetchMonthWiseData(DateTime date) async {
+    Database db = await database;
+    var result;
+    // var dataProvider = Provider.of<DataProvider>(context, listen: false);
+    result = db.rawQuery('''
+      SELECT strftime('%m', $colDate) as month, SUM($colAmt) as total
+      FROM $tableName WHERE
+      $colType=?
+      GROUP BY month
+    ''', ["Expense"]);
+    print("This is monthwise data : " + result.toString());
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> monthWiseData(DateTime date) async {
+    var tMapList = await fetchMonthWiseData(date);
+    List<Map<String, dynamic>> tList = [];
+    for (int i = 0; i < tMapList.length; i++) {
+      // print(tMapList[i]);
+      tList.add(tMapList[i]);
+    }
+    // print(tMapList.toString());
+    return tMapList;
+  }
+
   // Future<List<Map<String, dynamic>>> totalExpense() async {
 
   // }

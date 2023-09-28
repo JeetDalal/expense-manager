@@ -14,9 +14,14 @@ class DataProvider with ChangeNotifier {
   Category _category = categories[0];
   List<MoneyTransaction> _transactionList = [];
   List<Map<String, dynamic>> _categoryData = [];
+  List<Map<String, dynamic>> _monthWiseData = [];
 
   Category get category {
     return _category;
+  }
+
+  List<Map<String, dynamic>> get monthWiseData {
+    return _monthWiseData;
   }
 
   List<Map<String, dynamic>> get categoryData {
@@ -40,6 +45,13 @@ class DataProvider with ChangeNotifier {
     return _date;
   }
 
+  getMonthWiseData() async {
+    var tMapList = await DBHelper().fetchMonthWiseData(_date);
+    _monthWiseData = tMapList;
+    print("The monthwise data : " + tMapList.toString());
+    notifyListeners();
+  }
+
   String get selectedDate {
     if (_filter == ViewFilter.daily) {
       return DateFormat('dd MMMM,yyyy').format(_date);
@@ -60,6 +72,14 @@ class DataProvider with ChangeNotifier {
 
   setFilter(ViewFilter filter) {
     _filter = filter;
+    notifyListeners();
+  }
+
+  fetchMonthlyData() async {
+    var tMapList = await DBHelper().fetchMonthWiseData(_date);
+    // print("Hello");
+    // print(tMapList);?
+    _monthWiseData = tMapList;
     notifyListeners();
   }
 

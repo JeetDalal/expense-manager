@@ -59,29 +59,63 @@ class _RecordsState extends State<Records> {
             ),
             SizedBox(
               height: 500,
-              child: ListView.builder(
-                  itemCount: dateProvider.transactionList.length,
-                  itemBuilder: (context, index) {
-                    // print(databaseProvider.transactionList)
-                    return Column(
-                      children: [
-                        OrderTile(
-                          cat: dateProvider.transactionList[index].tCat,
-                          amount: dateProvider.transactionList[index].tAmt,
-                          date: dateProvider.transactionList[index].tDate,
-                          desc: dateProvider.transactionList[index].tDesc ?? "",
-                          title: dateProvider.transactionList[index].tName,
-                          type: dateProvider.transactionList[index].tType,
-                        ),
-                        index != dateProvider.transactionList.length - 1
-                            ? const Divider(
-                                color: Colors.grey,
-                                thickness: 0.5,
-                              )
-                            : Container(),
-                      ],
-                    );
-                  }),
+              child: Consumer<DataProvider>(
+                builder: (context, value, child) {
+                  return value.transactionList.isNotEmpty
+                      ? ListView.builder(
+                          itemCount: dateProvider.transactionList.length,
+                          itemBuilder: (context, index) {
+                            // print(databaseProvider.transactionList)
+                            return Column(
+                              children: [
+                                OrderTile(
+                                  cat: dateProvider.transactionList[index].tCat,
+                                  amount:
+                                      dateProvider.transactionList[index].tAmt,
+                                  date:
+                                      dateProvider.transactionList[index].tDate,
+                                  desc: dateProvider
+                                          .transactionList[index].tDesc ??
+                                      "",
+                                  title:
+                                      dateProvider.transactionList[index].tName,
+                                  type:
+                                      dateProvider.transactionList[index].tType,
+                                ),
+                                index != dateProvider.transactionList.length - 1
+                                    ? const Divider(
+                                        color: Colors.grey,
+                                        thickness: 0.5,
+                                      )
+                                    : Container(),
+                              ],
+                            );
+                          })
+                      : value.transactionList.isEmpty
+                          ? Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(
+                                    Icons.receipt_long,
+                                    color: Colors.blueGrey,
+                                    size: 60,
+                                  ),
+                                  Text(
+                                    "No Transactions Recorded ",
+                                    style: Theme.of(context)
+                                        .primaryTextTheme
+                                        .titleLarge!
+                                        .copyWith(
+                                          color: Colors.blueGrey,
+                                        ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          : Container();
+                },
+              ),
             ),
           ],
         ),

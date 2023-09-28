@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:money_manager/utils/themes.dart';
+import 'package:provider/provider.dart';
 
 class OrderTile extends StatelessWidget {
   final String title;
@@ -19,6 +21,7 @@ class OrderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     late IconData icon;
     switch (cat) {
       case "Food":
@@ -37,7 +40,7 @@ class OrderTile extends StatelessWidget {
     return ListTile(
       leading: Icon(
         icon,
-        color: Colors.yellow,
+        color: themeProvider.isDark ? Colors.yellow : Colors.blueGrey[900],
         size: 50,
       ),
       title: Text(

@@ -17,6 +17,7 @@ class _AnalysisState extends State<Analysis> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final p = Provider.of<DataProvider>(context, listen: false);
       p.moneyTransactionListByCategory();
+      p.getMonthWiseData();
     });
     super.initState();
   }
@@ -36,6 +37,16 @@ class _AnalysisState extends State<Analysis> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            "CATEGORYWISE ANALYSIS",
+            style: Theme.of(context)
+                .primaryTextTheme
+                .titleLarge!
+                .copyWith(fontSize: 25),
+          ),
+          const SizedBox(
+            height: 40,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -69,29 +80,43 @@ class _AnalysisState extends State<Analysis> {
                     itemCount: dataProvider.categoryData.length,
                     itemBuilder: (context, index) {
                       var data = dataProvider.categoryData[index];
-                      return Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 10,
-                            backgroundColor: colors[index],
-                          ),
-                          const SizedBox(
-                            width: 3,
-                          ),
-                          Text(
-                            data['tCat'],
-                            style: Theme.of(context)
-                                .primaryTextTheme
-                                .titleLarge!
-                                .copyWith(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 16),
-                          )
-                        ],
+                      print(data);
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 3),
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: 10,
+                              backgroundColor: colors[index],
+                            ),
+                            const SizedBox(
+                              width: 3,
+                            ),
+                            Text(
+                              data['tCat'],
+                              style: Theme.of(context)
+                                  .primaryTextTheme
+                                  .titleLarge!
+                                  .copyWith(
+                                      fontWeight: FontWeight.normal,
+                                      fontSize: 16),
+                            )
+                          ],
+                        ),
                       );
                     }),
               ),
             ],
+          ),
+          const SizedBox(
+            height: 50,
+          ),
+          Text(
+            "MONTHWISE ANALYSIS",
+            style: Theme.of(context)
+                .primaryTextTheme
+                .titleLarge!
+                .copyWith(fontSize: 25),
           ),
         ],
       ),
